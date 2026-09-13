@@ -322,3 +322,535 @@ document.getElementById("addList").onclick = () =>
   notify("Added to My List. Account syncing comes next.");
 
 loadCatalogue();
+/* =========================
+   FAPRESKI LANGUAGE SYSTEM
+   ========================= */
+
+const translations = {
+  en: {
+    navHome: "Home",
+    navNew: "New Releases",
+    navCategories: "Categories",
+    navList: "My List",
+    navMessages: "Messages",
+    search: "Search movies...",
+    signIn: "Sign in",
+    trial: "Start 7-Day Trial",
+    eyebrow: "FAPRESKI ORIGINAL EXPERIENCE",
+    heroTitle: "Movies at",
+    fingertips: "Your Fingertips.",
+    heroText: "Discover movies, stream in HD, save your favourites, and enjoy subtitles in your preferred language.",
+    watch: "▶ Watch Now",
+    myList: "＋ My List",
+    hd: "HD",
+    subtitles: "Subtitles",
+    global: "Global",
+    aboutEyebrow: "ABOUT FAPRESKI",
+    aboutTitle: "Movies, Entertainment & More",
+    discover: "DISCOVER",
+    newReleases: "New Releases",
+    seeAll: "See all →",
+    explore: "EXPLORE",
+    categories: "Browse by Category",
+    forYou: "FOR YOU",
+    trending: "Trending Now",
+    yourSpace: "YOUR SPACE",
+    listTitle: "My List",
+    listText: "Add movies you want to watch later. Your saved list will sync to your FAPRESKI account.",
+    createProfile: "Create Profile",
+    community: "COMMUNITY",
+    messages: "Messages",
+    messageText: "Search for a unique username and message friends. Privacy, block and report controls will be included.",
+    openMessages: "Open Messages",
+    membership: "MEMBERSHIP",
+    membershipTitle: "Start watching with a 7-day free trial.",
+    membershipText: "Plans will be connected to real recurring payments after the streaming and licensing setup is ready.",
+    startFreeTrial: "Start Free Trial",
+    monthly: "/month starting plan",
+    footer: "Movies at Your Fingertips",
+    help: "Help",
+    feedback: "Feedback",
+    report: "Report",
+    privacy: "Privacy"
+  },
+
+  fr: {
+    navHome: "Accueil",
+    navNew: "Nouveautés",
+    navCategories: "Catégories",
+    navList: "Ma liste",
+    navMessages: "Messages",
+    search: "Rechercher des films...",
+    signIn: "Se connecter",
+    trial: "Commencer l'essai de 7 jours",
+    eyebrow: "EXPÉRIENCE ORIGINALE FAPRESKI",
+    heroTitle: "Les films à",
+    fingertips: "portée de main.",
+    heroText: "Découvrez des films, regardez-les en HD, enregistrez vos favoris et profitez des sous-titres dans votre langue préférée.",
+    watch: "▶ Regarder",
+    myList: "＋ Ma liste",
+    hd: "HD",
+    subtitles: "Sous-titres",
+    global: "Monde",
+    aboutEyebrow: "À PROPOS DE FAPRESKI",
+    aboutTitle: "Films, divertissement et plus",
+    discover: "DÉCOUVRIR",
+    newReleases: "Nouveautés",
+    seeAll: "Tout voir →",
+    explore: "EXPLORER",
+    categories: "Parcourir par catégorie",
+    forYou: "POUR VOUS",
+    trending: "Tendances",
+    yourSpace: "VOTRE ESPACE",
+    listTitle: "Ma liste",
+    listText: "Ajoutez des films à regarder plus tard. Votre liste sera synchronisée avec votre compte FAPRESKI.",
+    createProfile: "Créer un profil",
+    community: "COMMUNAUTÉ",
+    messages: "Messages",
+    messageText: "Recherchez un nom d'utilisateur unique et envoyez un message à vos amis.",
+    openMessages: "Ouvrir les messages",
+    membership: "ABONNEMENT",
+    membershipTitle: "Commencez avec un essai gratuit de 7 jours.",
+    membershipText: "Les forfaits seront connectés aux paiements récurrents une fois la configuration terminée.",
+    startFreeTrial: "Commencer l'essai gratuit",
+    monthly: "/mois, forfait de départ",
+    footer: "Les films à portée de main.",
+    help: "Aide",
+    feedback: "Commentaires",
+    report: "Signaler",
+    privacy: "Confidentialité"
+  },
+
+  es: {
+    navHome: "Inicio",
+    navNew: "Estrenos",
+    navCategories: "Categorías",
+    navList: "Mi lista",
+    navMessages: "Mensajes",
+    search: "Buscar películas...",
+    signIn: "Iniciar sesión",
+    trial: "Iniciar prueba de 7 días",
+    eyebrow: "EXPERIENCIA ORIGINAL FAPRESKI",
+    heroTitle: "Películas al",
+    fingertips: "alcance de tu mano.",
+    heroText: "Descubre películas, disfruta en HD, guarda tus favoritas y usa subtítulos en tu idioma preferido.",
+    watch: "▶ Ver ahora",
+    myList: "＋ Mi lista",
+    hd: "HD",
+    subtitles: "Subtítulos",
+    global: "Global",
+    aboutEyebrow: "SOBRE FAPRESKI",
+    aboutTitle: "Películas, entretenimiento y más",
+    discover: "DESCUBRIR",
+    newReleases: "Estrenos",
+    seeAll: "Ver todo →",
+    explore: "EXPLORAR",
+    categories: "Explorar por categoría",
+    forYou: "PARA TI",
+    trending: "Tendencias",
+    yourSpace: "TU ESPACIO",
+    listTitle: "Mi lista",
+    listText: "Añade películas para verlas más tarde. Tu lista se sincronizará con tu cuenta de FAPRESKI.",
+    createProfile: "Crear perfil",
+    community: "COMUNIDAD",
+    messages: "Mensajes",
+    messageText: "Busca un nombre de usuario y envía mensajes a tus amigos.",
+    openMessages: "Abrir mensajes",
+    membership: "MEMBRESÍA",
+    membershipTitle: "Empieza a ver con una prueba gratuita de 7 días.",
+    membershipText: "Los planes se conectarán a pagos recurrentes cuando la configuración esté lista.",
+    startFreeTrial: "Iniciar prueba gratuita",
+    monthly: "/mes, plan inicial",
+    footer: "Películas al alcance de tu mano.",
+    help: "Ayuda",
+    feedback: "Comentarios",
+    report: "Reportar",
+    privacy: "Privacidad"
+  },
+
+  pt: {
+    navHome: "Início",
+    navNew: "Lançamentos",
+    navCategories: "Categorias",
+    navList: "Minha lista",
+    navMessages: "Mensagens",
+    search: "Pesquisar filmes...",
+    signIn: "Entrar",
+    trial: "Iniciar teste de 7 dias",
+    eyebrow: "EXPERIÊNCIA ORIGINAL FAPRESKI",
+    heroTitle: "Filmes ao",
+    fingertips: "alcance das suas mãos.",
+    heroText: "Descubra filmes, assista em HD, salve seus favoritos e aproveite legendas no seu idioma preferido.",
+    watch: "▶ Assistir agora",
+    myList: "＋ Minha lista",
+    hd: "HD",
+    subtitles: "Legendas",
+    global: "Global",
+    aboutEyebrow: "SOBRE A FAPRESKI",
+    aboutTitle: "Filmes, entretenimento e muito mais",
+    discover: "DESCOBRIR",
+    newReleases: "Lançamentos",
+    seeAll: "Ver tudo →",
+    explore: "EXPLORAR",
+    categories: "Navegar por categoria",
+    forYou: "PARA VOCÊ",
+    trending: "Em alta",
+    yourSpace: "SEU ESPAÇO",
+    listTitle: "Minha lista",
+    listText: "Adicione filmes para assistir depois. Sua lista será sincronizada com sua conta FAPRESKI.",
+    createProfile: "Criar perfil",
+    community: "COMUNIDADE",
+    messages: "Mensagens",
+    messageText: "Pesquise um nome de usuário e envie mensagens aos seus amigos.",
+    openMessages: "Abrir mensagens",
+    membership: "ASSINATURA",
+    membershipTitle: "Comece a assistir com um teste grátis de 7 dias.",
+    membershipText: "Os planos serão conectados a pagamentos recorrentes quando a configuração estiver pronta.",
+    startFreeTrial: "Iniciar teste grátis",
+    monthly: "/mês, plano inicial",
+    footer: "Filmes ao alcance das suas mãos.",
+    help: "Ajuda",
+    feedback: "Feedback",
+    report: "Denunciar",
+    privacy: "Privacidade"
+  },
+
+  ar: {
+    navHome: "الرئيسية",
+    navNew: "إصدارات جديدة",
+    navCategories: "الفئات",
+    navList: "قائمتي",
+    navMessages: "الرسائل",
+    search: "ابحث عن الأفلام...",
+    signIn: "تسجيل الدخول",
+    trial: "ابدأ تجربة مجانية لمدة 7 أيام",
+    eyebrow: "تجربة FAPRESKI الأصلية",
+    heroTitle: "الأفلام",
+    fingertips: "في متناول يدك.",
+    heroText: "اكتشف الأفلام وشاهدها بدقة HD واحفظ المفضلة واستمتع بالترجمة بلغتك المفضلة.",
+    watch: "▶ شاهد الآن",
+    myList: "＋ قائمتي",
+    hd: "HD",
+    subtitles: "الترجمة",
+    global: "عالمي",
+    aboutEyebrow: "عن FAPRESKI",
+    aboutTitle: "أفلام وترفيه وأكثر",
+    discover: "اكتشف",
+    newReleases: "إصدارات جديدة",
+    seeAll: "عرض الكل →",
+    explore: "استكشف",
+    categories: "تصفح حسب الفئة",
+    forYou: "لك",
+    trending: "الأكثر رواجًا",
+    yourSpace: "مساحتك",
+    listTitle: "قائمتي",
+    listText: "أضف الأفلام التي تريد مشاهدتها لاحقًا. ستتم مزامنة قائمتك مع حساب FAPRESKI.",
+    createProfile: "إنشاء ملف شخصي",
+    community: "المجتمع",
+    messages: "الرسائل",
+    messageText: "ابحث عن اسم مستخدم وأرسل رسائل إلى أصدقائك.",
+    openMessages: "فتح الرسائل",
+    membership: "العضوية",
+    membershipTitle: "ابدأ المشاهدة مع تجربة مجانية لمدة 7 أيام.",
+    membershipText: "سيتم ربط الخطط بالدفع المتكرر بعد اكتمال إعداد البث والتراخيص.",
+    startFreeTrial: "ابدأ التجربة المجانية",
+    monthly: "/شهريًا، الخطة الأساسية",
+    footer: "الأفلام في متناول يدك.",
+    help: "المساعدة",
+    feedback: "ملاحظات",
+    report: "إبلاغ",
+    privacy: "الخصوصية"
+  },
+
+  de: {
+    navHome: "Startseite",
+    navNew: "Neuerscheinungen",
+    navCategories: "Kategorien",
+    navList: "Meine Liste",
+    navMessages: "Nachrichten",
+    search: "Filme suchen...",
+    signIn: "Anmelden",
+    trial: "7-Tage-Testversion starten",
+    eyebrow: "DAS FAPRESKI ORIGINAL-ERLEBNIS",
+    heroTitle: "Filme",
+    fingertips: "direkt zur Hand.",
+    heroText: "Entdecke Filme, streame in HD, speichere deine Favoriten und genieße Untertitel in deiner bevorzugten Sprache.",
+    watch: "▶ Jetzt ansehen",
+    myList: "＋ Meine Liste",
+    hd: "HD",
+    subtitles: "Untertitel",
+    global: "Global",
+    aboutEyebrow: "ÜBER FAPRESKI",
+    aboutTitle: "Filme, Unterhaltung & mehr",
+    discover: "ENTDECKEN",
+    newReleases: "Neuerscheinungen",
+    seeAll: "Alle ansehen →",
+    explore: "ERKUNDEN",
+    categories: "Nach Kategorie durchsuchen",
+    forYou: "FÜR DICH",
+    trending: "Jetzt im Trend",
+    yourSpace: "DEIN BEREICH",
+    listTitle: "Meine Liste",
+    listText: "Füge Filme hinzu, die du später ansehen möchtest. Deine Liste wird mit deinem FAPRESKI-Konto synchronisiert.",
+    createProfile: "Profil erstellen",
+    community: "COMMUNITY",
+    messages: "Nachrichten",
+    messageText: "Suche nach einem Benutzernamen und sende deinen Freunden Nachrichten.",
+    openMessages: "Nachrichten öffnen",
+    membership: "MITGLIEDSCHAFT",
+    membershipTitle: "Starte mit einer kostenlosen 7-Tage-Testversion.",
+    membershipText: "Die Abonnements werden nach Abschluss der Streaming- und Lizenzierungseinrichtung mit wiederkehrenden Zahlungen verbunden.",
+    startFreeTrial: "Kostenlose Testversion starten",
+    monthly: "/Monat, Einstiegsplan",
+    footer: "Filme direkt zur Hand.",
+    help: "Hilfe",
+    feedback: "Feedback",
+    report: "Melden",
+    privacy: "Datenschutz"
+  },
+
+  it: {
+    navHome: "Home",
+    navNew: "Nuove uscite",
+    navCategories: "Categorie",
+    navList: "La mia lista",
+    navMessages: "Messaggi",
+    search: "Cerca film...",
+    signIn: "Accedi",
+    trial: "Inizia prova gratuita di 7 giorni",
+    eyebrow: "ESPERIENZA ORIGINALE FAPRESKI",
+    heroTitle: "Film a",
+    fingertips: "portata di mano.",
+    heroText: "Scopri film, guarda in HD, salva i tuoi preferiti e goditi i sottotitoli nella tua lingua preferita.",
+    watch: "▶ Guarda ora",
+    myList: "＋ La mia lista",
+    hd: "HD",
+    subtitles: "Sottotitoli",
+    global: "Globale",
+    aboutEyebrow: "INFORMAZIONI SU FAPRESKI",
+    aboutTitle: "Film, intrattenimento e altro",
+    discover: "SCOPRI",
+    newReleases: "Nuove uscite",
+    seeAll: "Vedi tutto →",
+    explore: "ESPLORA",
+    categories: "Sfoglia per categoria",
+    forYou: "PER TE",
+    trending: "Di tendenza",
+    yourSpace: "IL TUO SPAZIO",
+    listTitle: "La mia lista",
+    listText: "Aggiungi film da guardare più tardi. La tua lista verrà sincronizzata con il tuo account FAPRESKI.",
+    createProfile: "Crea profilo",
+    community: "COMMUNITY",
+    messages: "Messaggi",
+    messageText: "Cerca un nome utente e invia messaggi ai tuoi amici.",
+    openMessages: "Apri messaggi",
+    membership: "ABBONAMENTO",
+    membershipTitle: "Inizia a guardare con una prova gratuita di 7 giorni.",
+    membershipText: "I piani saranno collegati ai pagamenti ricorrenti dopo la configurazione dello streaming e delle licenze.",
+    startFreeTrial: "Inizia prova gratuita",
+    monthly: "/mese, piano iniziale",
+    footer: "Film a portata di mano.",
+    help: "Aiuto",
+    feedback: "Feedback",
+    report: "Segnala",
+    privacy: "Privacy"
+  },
+
+  zh: {
+    navHome: "首页",
+    navNew: "新片",
+    navCategories: "分类",
+    navList: "我的片单",
+    navMessages: "消息",
+    search: "搜索电影...",
+    signIn: "登录",
+    trial: "开始7天免费试用",
+    eyebrow: "FAPRESKI 原创体验",
+    heroTitle: "电影",
+    fingertips: "尽在指尖。",
+    heroText: "发现电影、享受高清播放、收藏喜欢的影片，并使用你喜欢的字幕语言。",
+    watch: "▶ 立即观看",
+    myList: "＋ 我的片单",
+    hd: "HD",
+    subtitles: "字幕",
+    global: "全球",
+    aboutEyebrow: "关于 FAPRESKI",
+    aboutTitle: "电影、娱乐及更多",
+    discover: "发现",
+    newReleases: "新片",
+    seeAll: "查看全部 →",
+    explore: "探索",
+    categories: "按分类浏览",
+    forYou: "为你推荐",
+    trending: "热门影片",
+    yourSpace: "你的空间",
+    listTitle: "我的片单",
+    listText: "添加以后想看的电影。你的片单会同步到 FAPRESKI 账户。",
+    createProfile: "创建个人资料",
+    community: "社区",
+    messages: "消息",
+    messageText: "搜索用户名并向朋友发送消息。",
+    openMessages: "打开消息",
+    membership: "会员",
+    membershipTitle: "开始7天免费试用。",
+    membershipText: "流媒体和授权设置完成后，套餐将连接到自动续费付款。",
+    startFreeTrial: "开始免费试用",
+    monthly: "/月，基础套餐",
+    footer: "电影尽在指尖。",
+    help: "帮助",
+    feedback: "反馈",
+    report: "举报",
+    privacy: "隐私"
+  }
+};
+
+function applyLanguage(language) {
+  const t = translations[language] || translations.en;
+
+  document.documentElement.lang = language;
+
+  const setText = (selector, text) => {
+    const element = document.querySelector(selector);
+    if (element) element.textContent = text;
+  };
+
+  const navLinks = document.querySelectorAll(".topbar nav a");
+  if (navLinks.length >= 5) {
+    navLinks[0].textContent = t.navHome;
+    navLinks[1].textContent = t.navNew;
+    navLinks[2].textContent = t.navCategories;
+    navLinks[3].textContent = t.navList;
+    navLinks[4].textContent = t.navMessages;
+  }
+
+  setText("#searchInput", "");
+  document.getElementById("searchInput")?.setAttribute("placeholder", t.search);
+  document.getElementById("searchInput")?.setAttribute("aria-label", t.search);
+
+  setText("#loginBtn", t.signIn);
+  setText("#trialBtn", t.trial);
+  setText("#pricingTrial", t.startFreeTrial);
+
+  const heroEyebrow = document.querySelector(".hero .eyebrow");
+  if (heroEyebrow) heroEyebrow.textContent = t.eyebrow;
+
+  const heroTitle = document.querySelector(".hero h1");
+  if (heroTitle) {
+    heroTitle.innerHTML = `${t.heroTitle}<br><span>${t.fingertips}</span>`;
+  }
+
+  const heroText = document.querySelector(".hero-content > p");
+  if (heroText) heroText.textContent = t.heroText;
+
+  const heroButtons = document.querySelectorAll(".hero-buttons button");
+  if (heroButtons.length >= 2) {
+    heroButtons[0].textContent = t.watch;
+    heroButtons[1].textContent = t.myList;
+  }
+
+  const heroMeta = document.querySelector(".hero-meta");
+  if (heroMeta) {
+    heroMeta.innerHTML = `<span>${t.hd}</span><span>${t.subtitles}</span><span>${t.global}</span>`;
+  }
+
+  const aboutEyebrow = document.querySelector(".about-fapreski .eyebrow");
+  if (aboutEyebrow) aboutEyebrow.textContent = t.aboutEyebrow;
+
+  setText(".about-fapreski h2", t.aboutTitle);
+
+  const sectionHeads = document.querySelectorAll(".section-head");
+  if (sectionHeads.length >= 3) {
+    sectionHeads[0].querySelector(".eyebrow").textContent = t.discover;
+    sectionHeads[0].querySelector("h2").textContent = t.newReleases;
+    sectionHeads[0].querySelector(".text-btn").textContent = t.seeAll;
+
+    sectionHeads[1].querySelector(".eyebrow").textContent = t.explore;
+    sectionHeads[1].querySelector("h2").textContent = t.categories;
+
+    sectionHeads[2].querySelector(".eyebrow").textContent = t.forYou;
+    sectionHeads[2].querySelector("h2").textContent = t.trending;
+  }
+
+  const categoryButtons = document.querySelectorAll("[data-category]");
+  const categoryNames = {
+    en: ["Action","Comedy","Drama","Thriller","Romance","Animation","Family","Horror","Documentary","Sci-Fi","Mystery"],
+    fr: ["Action","Comédie","Drame","Thriller","Romance","Animation","Famille","Horreur","Documentaire","Science-fiction","Mystère"],
+    es: ["Acción","Comedia","Drama","Thriller","Romance","Animación","Familia","Terror","Documental","Ciencia ficción","Misterio"],
+    pt: ["Ação","Comédia","Drama","Thriller","Romance","Animação","Família","Terror","Documentário","Ficção científica","Mistério"],
+    ar: ["أكشن","كوميديا","دراما","إثارة","رومانسية","رسوم متحركة","عائلي","رعب","وثائقي","خيال علمي","غموض"],
+    de: ["Action","Komödie","Drama","Thriller","Romantik","Animation","Familie","Horror","Dokumentation","Science-Fiction","Mystery"],
+    it: ["Azione","Commedia","Drammatico","Thriller","Romantico","Animazione","Famiglia","Horror","Documentario","Fantascienza","Mistero"],
+    zh: ["动作","喜剧","剧情","惊悚","爱情","动画","家庭","恐怖","纪录片","科幻","悬疑"]
+  };
+
+  const names = categoryNames[language] || categoryNames.en;
+  categoryButtons.forEach((button, index) => {
+    if (names[index]) button.textContent = names[index];
+  });
+
+  const featurePanels = document.querySelectorAll(".feature-panel");
+
+  if (featurePanels[0]) {
+    featurePanels[0].querySelector(".eyebrow").textContent = t.yourSpace;
+    featurePanels[0].querySelector("h2").textContent = t.listTitle;
+    featurePanels[0].querySelector("p").textContent = t.listText;
+    featurePanels[0].querySelector("button").textContent = t.createProfile;
+  }
+
+  if (featurePanels[1]) {
+    featurePanels[1].querySelector(".eyebrow").textContent = t.community;
+    featurePanels[1].querySelector("h2").textContent = t.messages;
+    featurePanels[1].querySelector("p").textContent = t.messageText;
+    featurePanels[1].querySelector("button").textContent = t.openMessages;
+  }
+
+  const pricing = document.querySelector(".pricing");
+  if (pricing) {
+    pricing.querySelector(".eyebrow").textContent = t.membership;
+    pricing.querySelector("h2").textContent = t.membershipTitle;
+    pricing.querySelector(".muted").textContent = t.membershipText;
+    pricing.querySelector(".price-card span").textContent = t.monthly;
+  }
+
+  const footerLinks = document.querySelectorAll(".footer-links a");
+  if (footerLinks.length >= 4) {
+    footerLinks[0].textContent = t.help;
+    footerLinks[1].textContent = t.feedback;
+    footerLinks[2].textContent = t.report;
+    footerLinks[3].textContent = t.privacy;
+  }
+
+  document.querySelectorAll("[data-language]").forEach(button => {
+    const active = button.dataset.language === language;
+    button.classList.toggle("active", active);
+
+    const label = button.textContent.replace(" ✓", "");
+    button.textContent = active ? `${label} ✓` : label;
+  });
+
+  const languageNames = {
+    en: "EN",
+    fr: "FR",
+    es: "ES",
+    pt: "PT",
+    ar: "AR",
+    de: "DE",
+    it: "IT",
+    zh: "中文"
+  };
+
+  languageBtn.textContent = `${languageNames[language] || "EN"} ▾`;
+
+  localStorage.setItem("fapreskiLanguage", language);
+
+  if (language === "ar") {
+    document.body.dir = "rtl";
+  } else {
+    document.body.dir = "ltr";
+  }
+
+  notify(`${t.signIn === "تسجيل الدخول" ? "تم تغيير اللغة" : "Language changed to " + languageNames[language]}`);
+}
+
+const savedLanguage = localStorage.getItem("fapreskiLanguage") || "en";
+applyLanguage(savedLanguage);
