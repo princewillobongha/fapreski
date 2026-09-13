@@ -241,8 +241,29 @@ if (searchBtn && searchInput) {
 document.getElementById("loginBtn").onclick = () =>
   notify("Google and email sign-in will be connected to Supabase.");
 
-document.getElementById("languageBtn").onclick = () =>
-  notify("Language selection will be connected to your account.");
+const languageBtn = document.getElementById("languageBtn");
+const languageMenu = document.getElementById("languageMenu");
+
+if (languageBtn && languageMenu) {
+  languageBtn.addEventListener("click", e => {
+    e.stopPropagation();
+    languageMenu.classList.toggle("hidden");
+  });
+
+  languageMenu.querySelectorAll("[data-language]").forEach(button => {
+    button.addEventListener("click", () => {
+      const language = button.dataset.language;
+      applyLanguage(language);
+      languageMenu.classList.add("hidden");
+    });
+  });
+
+  document.addEventListener("click", e => {
+    if (!e.target.closest(".language-wrap")) {
+      languageMenu.classList.add("hidden");
+    }
+  });
+}
 
 ["trialBtn","pricingTrial"].forEach(id => {
   const button = document.getElementById(id);
