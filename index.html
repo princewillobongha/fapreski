@@ -1,259 +1,211 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>FAPRESKI — Movies at Your Fingertips</title>
+<html lang="en">  
+<head>  
+  <meta charset="utf-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1">    <title>FAPRESKI — Movies at Your Fingertips</title>    <meta name="description" content="FAPRESKI is a movie streaming platform where you can discover movies, explore categories, watch in HD, save favorites, and enjoy subtitles.">    <meta name="keywords" content="FAPRESKI, movies, streaming, watch movies, HD movies, new releases, entertainment">    <meta name="robots" content="index, follow">    <meta property="og:title" content="FAPRESKI — Movies at Your Fingertips">  
+  <meta property="og:description" content="Discover movies, stream in HD, save your favorites, and enjoy subtitles on FAPRESKI.">  
+  <meta property="og:type" content="website">  
+  <meta property="og:url" content="https://princewillobongha.github.io/fapreski/">  
+  <meta property="og:image" content="https://princewillobongha.github.io/fapreski/fapreski-logo.jpg">    <link rel="canonical" href="https://princewillobongha.github.io/fapreski/">    <link rel="stylesheet" href="styles.css">  
+  <script type="application/ld+json">  
+{  
+  "@context": "https://schema.org",  
+  "@type": "WebSite",  
+  "name": "FAPRESKI",  
+  "url": "https://princewillobongha.github.io/fapreski/",  
+  "description": "FAPRESKI is a movie streaming platform where you can discover movies, explore categories, watch in HD, save favorites, and enjoy subtitles.",  
+  "potentialAction": {  
+    "@type": "SearchAction",  
+    "target": "https://princewillobongha.github.io/fapreski/?search={search_term_string}",  
+    "query-input": "required name=search_term_string"  
+  }  
+}  
+  </script>  
+</head>  <body>  
+  <header class="topbar">  
+    <a class="brand" href="#home" aria-label="FAPRESKI home">  
+      <img src="fapreski-logo.jpg" alt="FAPRESKI logo">  
+    </a>  
+    <nav>  
+      <a href="#home">Home</a>  
+      <a href="#new">New Releases</a>  
+      <a href="#categories">Categories</a>  
+      <a href="#mylist">My List</a>  
+      <a href="#messages">Messages</a>  
+    </nav>  
+    <div class="search-box">  
+      <input id="searchInput" type="search" placeholder="Search movies..." aria-label="Search movies">  
+      <button id="searchBtn" type="button">🔍</button>  
+    </div>  <button class="ghost" id="loginBtn">Sign in</button>  
+  <button class="primary" id="trialBtn">Start 7-Day Trial</button>  
+</div>
 
-  <meta name="description" content="FAPRESKI is a movie streaming platform where you can discover movies, explore categories, watch in HD, save favorites, and enjoy subtitles.">
+  </header>  
+  <div class="actions">  
+  <div class="language-wrap">  
+    <button class="ghost" id="languageBtn" type="button">EN ▾</button>  <div class="language-menu hidden" id="languageMenu">  
+  <button type="button" data-language="en">English ✓</button>  
+  <button type="button" data-language="fr">Français</button>  
+  <button type="button" data-language="es">Español</button>  
+  <button type="button" data-language="pt">Português</button>  
+  <button type="button" data-language="ar">العربية</button>  
+  <button type="button" data-language="de">Deutsch</button>  
+  <button type="button" data-language="it">Italiano</button>  
+  <button type="button" data-language="zh">中文</button>  
+</div>
 
-  <meta name="keywords" content="FAPRESKI, movies, streaming, watch movies, HD movies, new releases, entertainment">
+  </div>  <button class="ghost" id="loginBtn">Sign in</button>
+<button class="primary" id="trialBtn">Start 7-Day Trial</button>
 
-  <meta name="robots" content="index, follow">
+  </div>  
+  <main>  
+    <section class="hero" id="home">  
+      <div class="hero-content">  
+        <span class="eyebrow">FAPRESKI ORIGINAL EXPERIENCE</span>  
+        <h1>Movies at<br><span>Your Fingertips.</span></h1>  
+        <p>Discover movies, stream in HD, save your favourites, and enjoy subtitles in your preferred language.</p>  
+        <div class="hero-buttons">  
+          <button class="primary large" data-watch="0">▶ Watch Now</button>  
+          <button class="secondary large" id="heroList">＋ My List</button>  
+        </div>  
+        <div class="hero-meta"><span>HD</span><span>Subtitles</span><span>Global</span></div>  
+      </div>  
+    </section>  
+        <section class="section about-fapreski" id="about">  
+      <div class="section-head">  
+        <div>  
+          <span class="eyebrow">ABOUT FAPRESKI</span>  
+          <h2>Movies, Entertainment & More</h2>  
+        </div>  
+      </div>  <div class="about-content">  
+    <p>  
+      FAPRESKI is a movie streaming and entertainment platform built for  
+      discovering and enjoying movies online. Explore new releases,  
+      trending movies, and entertainment across a wide range of categories.  
+    </p>  
 
-  <meta property="og:title" content="FAPRESKI — Movies at Your Fingertips">
-  <meta property="og:description" content="Discover movies, stream in HD, save your favorites, and enjoy subtitles on FAPRESKI.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://princewillobongha.github.io/fapreski/">
-  <meta property="og:image" content="https://princewillobongha.github.io/fapreski/fapreski-logo.jpg">
+    <p>  
+      Browse movies by Action, Comedy, Drama, Thriller, Romance, Animation,  
+      Family, Horror, Documentary, Sci-Fi, and Mystery. FAPRESKI is designed  
+      to make discovering movies simple, enjoyable, and accessible.  
+    </p>  
 
-  <link rel="canonical" href="https://princewillobongha.github.io/fapreski/">
+    <p>  
+      Discover your next movie on FAPRESKI — Movies at Your Fingertips.  
+    </p>  
+  </div>  
+    </section>  
 
-  <link rel="stylesheet" href="styles.css">
-  <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "FAPRESKI",
-  "url": "https://princewillobongha.github.io/fapreski/",
-  "description": "FAPRESKI is a movie streaming platform where you can discover movies, explore categories, watch in HD, save favorites, and enjoy subtitles.",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://princewillobongha.github.io/fapreski/?search={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
-}
-  </script>
-</head>
-  
-<body>
-  <header class="topbar">
-  <header class="topbar">
-  <a class="brand" href="#home" aria-label="FAPRESKI home">
-    <img src="fapreski-logo.jpg" alt="FAPRESKI logo">
-  </a>
+<section class="section" id="new">  
+  <div class="section-head">  
+    <div><span class="eyebrow">DISCOVER</span><h2>New Releases</h2></div>  
+    <button class="text-btn" id="seeMoreBtn">See all →</button>  
+  </div>  
+  <div class="movie-grid" id="new-grid"></div>  
+</section>  
 
-  <nav>
-    <a href="#home">Home</a>
-    <a href="#new">New Releases</a>
-    <a href="#categories">Categories</a>
-    <a href="#mylist">My List</a>
-    <a href="#messages">Messages</a>
-  </nav>
+<section class="section" id="categories">  
+  <div class="section-head">  
+    <div><span class="eyebrow">EXPLORE</span><h2>Browse by Category</h2></div>  
+  </div>  
+  <div class="chips" id="categoryChips">  
+    <button data-category="action">Action</button>  
+    <button data-category="comedy">Comedy</button>  
+    <button data-category="drama">Drama</button>  
+    <button data-category="thriller">Thriller</button>  
+    <button data-category="romance">Romance</button>  
+    <button data-category="animation">Animation</button>  
+    <button data-category="family">Family</button>  
+    <button data-category="horror">Horror</button>  
+    <button data-category="documentary">Documentary</button>  
+    <button data-category="scifi">Sci-Fi</button>  
+    <button data-category="mystery">Mystery</button>  
+  </div>  
+</section>  
 
-  <div class="search-box">
-    <input id="searchInput" type="search" placeholder="Search movies..." aria-label="Search movies">
-    <button id="searchBtn" type="button">🔍</button>
-  </div>
+<section class="section" id="trending">  
+  <div class="section-head">  
+    <div><span class="eyebrow">FOR YOU</span><h2>Trending Now</h2></div>  
+  </div>  
+  <div class="movie-grid" id="trending-grid"></div>  
+</section>  
 
-  <div class="actions">
-    <div class="language-wrap">
-      <button class="ghost" id="languageBtn" type="button">EN ▾</button>
+<section class="section feature-panel" id="mylist">  
+  <div>  
+    <span class="eyebrow">YOUR SPACE</span>  
+    <h2>My List</h2>  
+    <p>Add movies you want to watch later. Your saved list will sync to your FAPRESKI account.</p>  
+  </div>  
+  <button class="secondary" id="profileBtn">Create Profile</button>  
+</section>  
 
-      <div class="language-menu hidden" id="languageMenu">
-        <button type="button" data-language="en">English ✓</button>
-        <button type="button" data-language="fr">Français</button>
-        <button type="button" data-language="es">Español</button>
-        <button type="button" data-language="pt">Português</button>
-        <button type="button" data-language="ar">العربية</button>
-        <button type="button" data-language="de">Deutsch</button>
-        <button type="button" data-language="it">Italiano</button>
-        <button type="button" data-language="zh">中文</button>
-      </div>
-    </div>
+<section class="section feature-panel" id="messages">  
+  <div>  
+    <span class="eyebrow">COMMUNITY</span>  
+    <h2>Messages</h2>  
+    <p>Search for a unique username and message friends. Privacy, block and report controls will be included.</p>  
+  </div>  
+  <button class="secondary" id="messageBtn">Open Messages</button>  
+</section>  
 
-    <button class="ghost" id="loginBtn">Sign in</button>
-    <button class="primary" id="trialBtn">Start 7-Day Trial</button>
-  </div>
-  </header>
-  <div class="actions">
-  <div class="language-wrap">
-    <button class="ghost" id="languageBtn" type="button">EN ▾</button>
+<section class="pricing section">  
+  <span class="eyebrow">MEMBERSHIP</span>  
+  <h2>Start watching with a 7-day free trial.</h2>  
+  <p class="muted">Plans will be connected to real recurring payments after the streaming and licensing setup is ready.</p>  
+  <div class="price-card">  
+    <div><strong>$5</strong><span>/month starting plan</span></div>  
+    <button class="primary" id="pricingTrial">Start Free Trial</button>  
+  </div>  
+</section>
 
-    <div class="language-menu hidden" id="languageMenu">
-      <button type="button" data-language="en">English ✓</button>
-      <button type="button" data-language="fr">Français</button>
-      <button type="button" data-language="es">Español</button>
-      <button type="button" data-language="pt">Português</button>
-      <button type="button" data-language="ar">العربية</button>
-      <button type="button" data-language="de">Deutsch</button>
-      <button type="button" data-language="it">Italiano</button>
-      <button type="button" data-language="zh">中文</button>
-    </div>
-  </div>
-
-  <button class="ghost" id="loginBtn">Sign in</button>
-  <button class="primary" id="trialBtn">Start 7-Day Trial</button>
-  </div>
-  <main>
-    <section class="hero" id="home">
-      <div class="hero-content">
-        <span class="eyebrow">FAPRESKI ORIGINAL EXPERIENCE</span>
-        <h1>Movies at<br><span>Your Fingertips.</span></h1>
-        <p>Discover movies, stream in HD, save your favourites, and enjoy subtitles in your preferred language.</p>
-        <div class="hero-buttons">
-          <button class="primary large" data-watch="0">▶ Watch Now</button>
-          <button class="secondary large" id="heroList">＋ My List</button>
-        </div>
-        <div class="hero-meta"><span>HD</span><span>Subtitles</span><span>Global</span></div>
-      </div>
-    </section>
-        <section class="section about-fapreski" id="about">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">ABOUT FAPRESKI</span>
-          <h2>Movies, Entertainment & More</h2>
-        </div>
-      </div>
-
-      <div class="about-content">
-        <p>
-          FAPRESKI is a movie streaming and entertainment platform built for
-          discovering and enjoying movies online. Explore new releases,
-          trending movies, and entertainment across a wide range of categories.
-        </p>
-
-        <p>
-          Browse movies by Action, Comedy, Drama, Thriller, Romance, Animation,
-          Family, Horror, Documentary, Sci-Fi, and Mystery. FAPRESKI is designed
-          to make discovering movies simple, enjoyable, and accessible.
-        </p>
-
-        <p>
-          Discover your next movie on FAPRESKI — Movies at Your Fingertips.
-        </p>
-      </div>
-        </section>
-
-    <section class="section" id="new">
-      <div class="section-head">
-        <div><span class="eyebrow">DISCOVER</span><h2>New Releases</h2></div>
-        <button class="text-btn" id="seeMoreBtn">See all →</button>
-      </div>
-      <div class="movie-grid" id="new-grid"></div>
-    </section>
-
-    <section class="section" id="categories">
-      <div class="section-head">
-        <div><span class="eyebrow">EXPLORE</span><h2>Browse by Category</h2></div>
-      </div>
-      <div class="chips" id="categoryChips">
-        <button data-category="action">Action</button>
-        <button data-category="comedy">Comedy</button>
-        <button data-category="drama">Drama</button>
-        <button data-category="thriller">Thriller</button>
-        <button data-category="romance">Romance</button>
-        <button data-category="animation">Animation</button>
-        <button data-category="family">Family</button>
-        <button data-category="horror">Horror</button>
-        <button data-category="documentary">Documentary</button>
-        <button data-category="scifi">Sci-Fi</button>
-        <button data-category="mystery">Mystery</button>
-      </div>
-    </section>
-
-    <section class="section" id="trending">
-      <div class="section-head">
-        <div><span class="eyebrow">FOR YOU</span><h2>Trending Now</h2></div>
-      </div>
-      <div class="movie-grid" id="trending-grid"></div>
-    </section>
-
-    <section class="section feature-panel" id="mylist">
-      <div>
-        <span class="eyebrow">YOUR SPACE</span>
-        <h2>My List</h2>
-        <p>Add movies you want to watch later. Your saved list will sync to your FAPRESKI account.</p>
-      </div>
-      <button class="secondary" id="profileBtn">Create Profile</button>
-    </section>
-
-    <section class="section feature-panel" id="messages">
-      <div>
-        <span class="eyebrow">COMMUNITY</span>
-        <h2>Messages</h2>
-        <p>Search for a unique username and message friends. Privacy, block and report controls will be included.</p>
-      </div>
-      <button class="secondary" id="messageBtn">Open Messages</button>
-    </section>
-
-    <section class="pricing section">
-      <span class="eyebrow">MEMBERSHIP</span>
-      <h2>Start watching with a 7-day free trial.</h2>
-      <p class="muted">Plans will be connected to real recurring payments after the streaming and licensing setup is ready.</p>
-      <div class="price-card">
-        <div><strong>$5</strong><span>/month starting plan</span></div>
-        <button class="primary" id="pricingTrial">Start Free Trial</button>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div><strong>FAPRESKI</strong><span>Movies at Your Fingertips</span></div>
-    <div class="footer-links"><a href="#">Help</a><a href="#">Feedback</a><a href="#">Report</a><a href="#">Privacy</a></div>
-  </footer>
-
-  <div class="modal hidden" id="movieModal" role="dialog" aria-modal="true">
-    <div class="modal-card">
-      <button class="close" id="closeMovie">×</button>
-      <div class="player-wrap">
-        <video id="player" controls playsinline preload="metadata">
-          <track id="captionTrack" kind="subtitles" srclang="en" label="English" default>
-        </video>
-      </div>
-      <div class="movie-info">
-        <div>
-          <span class="eyebrow" id="modalGenre">MOVIE</span>
-          <h2 id="modalTitle"></h2>
-          <p id="modalDescription"></p>
-          <div class="hero-meta" id="modalMeta"></div>
-        </div>
-        <button class="secondary" id="addList">＋ My List</button>
-      </div>
-      <p class="demo-note">Demo player: production movies will be connected only after appropriate streaming rights are secured.</p>
-    </div>
-  </div>
-
-  <div class="modal hidden" id="profileModal" role="dialog" aria-modal="true">
-    <div class="modal-card simple-modal">
-      <button class="close" id="closeProfile">×</button>
-      <span class="eyebrow">FAPRESKI ACCOUNT</span>
-      <h2>Create Profile</h2>
-      <p>Create your FAPRESKI profile. Authentication will be connected to the database next.</p>
-      <form id="profileForm">
-        <input id="profileName" type="text" placeholder="Full name" required>
-        <input id="profileUsername" type="text" placeholder="Unique username" required>
-        <input id="profileEmail" type="email" placeholder="Email address" required>
-        <input id="profileCountry" type="text" placeholder="Country">
-        <button class="primary" type="submit">Create Profile</button>
-      </form>
-    </div>
-  </div>
-
-  <div class="modal hidden" id="messageModal" role="dialog" aria-modal="true">
-    <div class="modal-card simple-modal">
-      <button class="close" id="closeMessages">×</button>
-      <span class="eyebrow">FAPRESKI COMMUNITY</span>
-      <h2>Messages</h2>
-      <input id="usernameSearch" type="search" placeholder="Search username">
-      <button class="primary" id="searchUsername">Search</button>
-      <div id="messageResults"></div>
-      <p class="demo-note">Messaging will be connected to authenticated FAPRESKI accounts and the database.</p>
-    </div>
-  </div>
-
-  <div class="toast hidden" id="toast"></div>
-  <script src="app.js"></script>
-</body>
+  </main>    <footer>  
+    <div><strong>FAPRESKI</strong><span>Movies at Your Fingertips</span></div>  
+    <div class="footer-links"><a href="#">Help</a><a href="#">Feedback</a><a href="#">Report</a><a href="#">Privacy</a></div>  
+  </footer>    <div class="modal hidden" id="movieModal" role="dialog" aria-modal="true">  
+    <div class="modal-card">  
+      <button class="close" id="closeMovie">×</button>  
+      <div class="player-wrap">  
+        <video id="player" controls playsinline preload="metadata">  
+          <track id="captionTrack" kind="subtitles" srclang="en" label="English" default>  
+        </video>  
+      </div>  
+      <div class="movie-info">  
+        <div>  
+          <span class="eyebrow" id="modalGenre">MOVIE</span>  
+          <h2 id="modalTitle"></h2>  
+          <p id="modalDescription"></p>  
+          <div class="hero-meta" id="modalMeta"></div>  
+        </div>  
+        <button class="secondary" id="addList">＋ My List</button>  
+      </div>  
+      <p class="demo-note">Demo player: production movies will be connected only after appropriate streaming rights are secured.</p>  
+    </div>  
+  </div>    <div class="modal hidden" id="profileModal" role="dialog" aria-modal="true">  
+    <div class="modal-card simple-modal">  
+      <button class="close" id="closeProfile">×</button>  
+      <span class="eyebrow">FAPRESKI ACCOUNT</span>  
+      <h2>Create Profile</h2>  
+      <p>Create your FAPRESKI profile. Authentication will be connected to the database next.</p>  
+      <form id="profileForm">  
+        <input id="profileName" type="text" placeholder="Full name" required>  
+        <input id="profileUsername" type="text" placeholder="Unique username" required>  
+        <input id="profileEmail" type="email" placeholder="Email address" required>  
+        <input id="profileCountry" type="text" placeholder="Country">  
+        <button class="primary" type="submit">Create Profile</button>  
+      </form>  
+    </div>  
+  </div>    <div class="modal hidden" id="messageModal" role="dialog" aria-modal="true">  
+    <div class="modal-card simple-modal">  
+      <button class="close" id="closeMessages">×</button>  
+      <span class="eyebrow">FAPRESKI COMMUNITY</span>  
+      <h2>Messages</h2>  
+      <input id="usernameSearch" type="search" placeholder="Search username">  
+      <button class="primary" id="searchUsername">Search</button>  
+      <div id="messageResults"></div>  
+      <p class="demo-note">Messaging will be connected to authenticated FAPRESKI accounts and the database.</p>  
+    </div>  
+  </div>    <div class="toast hidden" id="toast"></div>  
+  <script src="app.js"></script>  
+</body>  
 </html>
