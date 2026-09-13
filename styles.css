@@ -50,3 +50,14 @@ button{font:inherit;border:0;cursor:pointer;color:inherit}.primary,.secondary,.g
   background: rgba(255, 255, 255, 0.08);
   font-weight: 600;
 }
+.language-menu button {
+  color: #ffffff !important;
+  background: #111111 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.language-menu button:hover {
+  color: #ffffff !important;
+  background: #333333 !important;
+}
