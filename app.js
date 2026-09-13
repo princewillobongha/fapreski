@@ -1,4 +1,5 @@
 const API_BASE = "https://fapreski-api.princewillobongha.workers.dev";
+let currentLanguage = localStorage.getItem("fapreskiLanguage") || "en";
 const demoVideo = "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4";
 
 let movies = [];
@@ -71,12 +72,30 @@ async function api(endpoint) {
   return response.json();
 }
 
-async function loadCatalogue() {
-  try {
-    const [upcomingData, trendingData] = await Promise.all([
-      api("/upcoming"),
-      api("/trending")
-    ]);
+async function api(endpoint) {
+  const languageMap = {
+    en: "en-US",
+    fr: "fr-FR",
+    es: "es-ES",
+    pt: "pt-PT",
+    ar: "ar-SA",
+    de: "de-DE",
+    it: "it-IT",
+    zh: "zh-CN"
+  };
+
+  const tmdbLanguage = languageMap[currentLanguage] || "en-US";
+
+  const separator = endpoint.includes("?") ? "&" : "?";
+
+  const response = await fetch(
+    `${API_BASE}${endpoint}${separator}language=${encodeURIComponent(tmdbLanguage)}`
+  );
+
+  if (!response.ok) throw new Error(`API error: ${response.status}`);
+
+  return response.json();
+}
 
     const upcoming = (upcomingData.results || []).map(m => convertMovie(m, "NEW"));
     const trending = (trendingData.results || []).map(m => convertMovie(m, "TRENDING"));
@@ -828,6 +847,7 @@ function applyLanguage(language) {
     languageBtn.textContent = `${languageNames[language] || "EN"} ▾`;
   }
 
+  currentLanguage = language;
   localStorage.setItem("fapreskiLanguage",language);
 }
 
