@@ -1,7 +1,8 @@
 const API_BASE = "https://fapreski-api.princewillobongha.workers.dev";
-const demoVideo = "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4";
 
-let currentLanguage = localStorage.getItem("fapreskiLanguage") || "en";
+let currentLanguage =
+  localStorage.getItem("fapreskiLanguage") || "en";
+
 let movies = [];
 
 const fallbackMovies = [
@@ -41,6 +42,10 @@ const genreEl = document.getElementById("modalGenre");
 const metaEl = document.getElementById("modalMeta");
 const toast = document.getElementById("toast");
 
+/* =========================
+   HELPERS
+========================= */
+
 function posterUrl(path) {
   return path
     ? `https://image.tmdb.org/t/p/w500${path}`
@@ -57,24 +62,60 @@ function escapeHtml(value) {
   }[c]));
 }
 
+function normalizeTitle(title) {
+  return String(title || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+}
+
+/* =========================
+   TMDB MOVIE CONVERTER
+========================= */
+
 function convertMovie(movie, tag = "") {
   return {
     id: movie.id,
     title: movie.title || movie.name || "Untitled",
+
     genre: movie.genre_names?.length
       ? movie.genre_names.join(" • ")
       : "Movie",
+
     year:
-      (movie.release_date ||
+      (
+        movie.release_date ||
         movie.first_air_date ||
-        "").substring(0, 4) || "—",
-    rating: Number(movie.vote_average || 0).toFixed(1),
-    desc: movie.overview || "No description available.",
-    poster: posterUrl(movie.poster_path),
-    backdrop: posterUrl(movie.backdrop_path),
-    tag
+        ""
+      ).substring(0, 4) || "—",
+
+    rating: Number(
+      movie.vote_average || 0
+    ).toFixed(1),
+
+    desc:
+      movie.overview ||
+      "No description available.",
+
+    poster:
+      posterUrl(movie.poster_path),
+
+    backdrop:
+      posterUrl(movie.backdrop_path),
+
+    tag,
+
+    /* Will be filled when a free version is found */
+    freeVideo: null,
+    freePoster: null,
+    freeSource: null,
+    freeLicense: null,
+    freeRights: null
   };
 }
+
+/* =========================
+   MOVIE CARD
+========================= */
 
 function card(movie, index) {
   const background = movie.poster
@@ -82,15 +123,29 @@ function card(movie, index) {
     : "";
 
   return `
-    <article class="movie-card" data-watch="${index}" tabindex="0">
+    <article
+      class="movie-card"
+      data-watch="${index}"
+      tabindex="0"
+    >
+
       <div class="poster" ${background}>
-        <span>${escapeHtml(movie.tag || "MOVIE")}</span>
+        <span>
+          ${escapeHtml(movie.tag || "MOVIE")}
+        </span>
       </div>
 
       <div class="movie-body">
-        <h3>${escapeHtml(movie.title)}</h3>
-        <p>${escapeHtml(movie.genre)} • ${movie.rating} ★</p>
+        <h3>
+          ${escapeHtml(movie.title)}
+        </h3>
+
+        <p>
+          ${escapeHtml(movie.genre)}
+          • ${movie.rating} ★
+        </p>
       </div>
+
     </article>
   `;
 }
@@ -100,7 +155,9 @@ function renderNew(list) {
 
   newGrid.innerHTML = list
     .slice(0, 10)
-    .map((movie, index) => card(movie, index))
+    .map((movie, index) =>
+      card(movie, index)
+    )
     .join("");
 }
 
@@ -109,7 +166,9 @@ function renderTrending(list) {
 
   trendingGrid.innerHTML = list
     .slice(0, 10)
-    .map((movie, index) => card(movie, index))
+    .map((movie, index) =>
+      card(movie, index)
+    )
     .join("");
 }
 
@@ -130,64 +189,171 @@ async function api(endpoint) {
   };
 
   const tmdbLanguage =
-    languageMap[currentLanguage] || "en-US";
+    languageMap[currentLanguage] ||
+    "en-US";
 
-  const separator = endpoint.includes("?")
-    ? "&"
-    : "?";
+  /*
+    Free-movie endpoints don't need
+    the TMDB language parameter.
+  */
 
-  const response = await fetch(
-    `${API_BASE}${endpoint}${separator}language=${encodeURIComponent(tmdbLanguage)}`
-  );
+  const isFreeEndpoint =
+    endpoint.startsWith("/free-");
+
+  const separator =
+    endpoint.includes("?")
+      ? "&"
+      : "?";
+
+  const finalEndpoint =
+    isFreeEndpoint
+      ? endpoint
+      : `${endpoint}${separator}language=${encodeURIComponent(tmdbLanguage)}`;
+
+  const response =
+    await fetch(
+      `${API_BASE}${finalEndpoint}`
+    );
 
   if (!response.ok) {
-    throw new Error(`API error: ${response.status}`);
+    throw new Error(
+      `API error: ${response.status}`
+    );
   }
 
   return response.json();
 }
 
 /* =========================
-   LOAD MOVIES
+   FIND FREE VERSION
+========================= */
+
+async function findFreeMovie(title) {
+  try {
+    const data =
+      await api(
+        `/free-search?q=${encodeURIComponent(title)}`
+      );
+
+    const results =
+      data.results || [];
+
+    if (!results.length) {
+      return null;
+    }
+
+    const wanted =
+      normalizeTitle(title);
+
+    /*
+      First try an exact title match.
+    */
+    let match =
+      results.find(movie =>
+        normalizeTitle(movie.title) === wanted
+      );
+
+    /*
+      If there is no exact match,
+      try a safe partial match.
+    */
+    if (!match) {
+      match =
+        results.find(movie => {
+          const found =
+            normalizeTitle(movie.title);
+
+          return (
+            found.includes(wanted) ||
+            wanted.includes(found)
+          );
+        });
+    }
+
+    return match || null;
+
+  } catch (error) {
+    console.error(
+      "Free movie search error:",
+      error
+    );
+
+    return null;
+  }
+}
+
+/* =========================
+   LOAD CATALOGUE
 ========================= */
 
 async function loadCatalogue() {
   try {
-    const [upcomingData, trendingData] =
-      await Promise.all([
-        api("/upcoming"),
-        api("/trending")
-      ]);
+
+    const [
+      upcomingData,
+      trendingData
+    ] = await Promise.all([
+      api("/upcoming"),
+      api("/trending")
+    ]);
 
     const upcoming =
       (upcomingData.results || [])
-        .map(movie => convertMovie(movie, "NEW"));
+        .map(movie =>
+          convertMovie(
+            movie,
+            "NEW"
+          )
+        );
 
     const trending =
       (trendingData.results || [])
-        .map(movie => convertMovie(movie, "TRENDING"));
+        .map(movie =>
+          convertMovie(
+            movie,
+            "TRENDING"
+          )
+        );
 
-    movies = [...upcoming, ...trending];
+    movies = [
+      ...upcoming,
+      ...trending
+    ];
 
     if (!movies.length) {
-      throw new Error("No movies returned");
+      throw new Error(
+        "No movies returned"
+      );
     }
 
     renderNew(
-      upcoming.length ? upcoming : trending
+      upcoming.length
+        ? upcoming
+        : trending
     );
 
     renderTrending(
-      trending.length ? trending : upcoming
+      trending.length
+        ? trending
+        : upcoming
     );
 
   } catch (error) {
-    console.error("FAPRESKI API error:", error);
+
+    console.error(
+      "FAPRESKI API error:",
+      error
+    );
 
     movies = fallbackMovies;
 
-    renderNew(fallbackMovies);
-    renderTrending(fallbackMovies);
+    renderNew(
+      fallbackMovies
+    );
+
+    renderTrending(
+      fallbackMovies
+    );
 
     notify(
       "Showing demo movies while the movie service loads."
@@ -200,6 +366,7 @@ async function loadCatalogue() {
 ========================= */
 
 async function loadCategory(category) {
+
   const endpointMap = {
     action: "/action",
     comedy: "/comedy",
@@ -214,14 +381,19 @@ async function loadCategory(category) {
     mystery: "/mystery"
   };
 
-  const endpoint = endpointMap[category];
+  const endpoint =
+    endpointMap[category];
 
   if (!endpoint) return;
 
   try {
-    notify(`Loading ${category} movies...`);
 
-    const data = await api(endpoint);
+    notify(
+      `Loading ${category} movies...`
+    );
+
+    const data =
+      await api(endpoint);
 
     const results =
       (data.results || [])
@@ -233,7 +405,11 @@ async function loadCategory(category) {
         );
 
     if (!results.length) {
-      notify(`No ${category} movies found.`);
+
+      notify(
+        `No ${category} movies found.`
+      );
+
       return;
     }
 
@@ -246,9 +422,12 @@ async function loadCategory(category) {
     }
 
     const newTitle =
-      document.querySelector("#new h2");
+      document.querySelector(
+        "#new h2"
+      );
 
     if (newTitle) {
+
       newTitle.textContent =
         `${category.charAt(0).toUpperCase()}${category.slice(1)} Movies`;
     }
@@ -260,7 +439,11 @@ async function loadCategory(category) {
       });
 
   } catch (error) {
-    console.error(error);
+
+    console.error(
+      "Category error:",
+      error
+    );
 
     notify(
       `${category} movies could not be loaded.`
@@ -273,34 +456,197 @@ async function loadCategory(category) {
 ========================= */
 
 async function searchMovies(query) {
-  const cleanQuery = query.trim();
+
+  const cleanQuery =
+    query.trim();
 
   if (!cleanQuery) {
-    notify("Type a movie name first.");
+
+    notify(
+      "Type a movie name first."
+    );
+
     return;
   }
 
   try {
+
     notify(
       `Searching for "${cleanQuery}"...`
     );
 
-    const data =
+    /*
+      TMDB search gives us the normal
+      movie information and posters.
+    */
+
+    const tmdbData =
       await api(
         `/search?q=${encodeURIComponent(cleanQuery)}`
       );
 
-    const results =
-      (data.results || [])
+    let results =
+      (tmdbData.results || [])
         .map(movie =>
-          convertMovie(movie, "SEARCH")
+          convertMovie(
+            movie,
+            "SEARCH"
+          )
         );
+
+    /*
+      Also search Internet Archive
+      for legally available versions.
+    */
+
+    let freeResults = [];
+
+    try {
+
+      const freeData =
+        await api(
+          `/free-search?q=${encodeURIComponent(cleanQuery)}`
+        );
+
+      freeResults =
+        freeData.results || [];
+
+    } catch (freeError) {
+
+      console.error(
+        "Free search error:",
+        freeError
+      );
+    }
+
+    /*
+      Attach free playable versions
+      to matching TMDB movies.
+    */
+
+    results =
+      results.map(movie => {
+
+        const wanted =
+          normalizeTitle(
+            movie.title
+          );
+
+        const freeMatch =
+          freeResults.find(freeMovie => {
+
+            const freeTitle =
+              normalizeTitle(
+                freeMovie.title
+              );
+
+            return (
+              freeTitle === wanted ||
+              freeTitle.includes(wanted) ||
+              wanted.includes(freeTitle)
+            );
+          });
+
+        if (freeMatch) {
+
+          movie.freeVideo =
+            freeMatch.video;
+
+          movie.freePoster =
+            freeMatch.poster;
+
+          movie.freeSource =
+            freeMatch.source;
+
+          movie.freeLicense =
+            freeMatch.license;
+
+          movie.freeRights =
+            freeMatch.rights;
+        }
+
+        return movie;
+      });
+
+    /*
+      If Internet Archive has a movie
+      that TMDB didn't return, add it
+      as a free movie result.
+    */
+
+    const tmdbTitles =
+      new Set(
+        results.map(movie =>
+          normalizeTitle(movie.title)
+        )
+      );
+
+    for (const freeMovie of freeResults) {
+
+      const normalized =
+        normalizeTitle(
+          freeMovie.title
+        );
+
+      if (
+        normalized &&
+        !tmdbTitles.has(normalized)
+      ) {
+
+        results.push({
+
+          id:
+            `archive-${freeMovie.id}`,
+
+          title:
+            freeMovie.title,
+
+          genre:
+            "Free Movie",
+
+          year:
+            freeMovie.year || "—",
+
+          rating:
+            "—",
+
+          desc:
+            freeMovie.description ||
+            "Free movie available for legal viewing.",
+
+          poster:
+            freeMovie.poster || "",
+
+          backdrop:
+            freeMovie.poster || "",
+
+          tag:
+            "FREE",
+
+          freeVideo:
+            freeMovie.video,
+
+          freePoster:
+            freeMovie.poster,
+
+          freeSource:
+            freeMovie.source,
+
+          freeLicense:
+            freeMovie.license,
+
+          freeRights:
+            freeMovie.rights
+        });
+      }
+    }
 
     movies = results;
 
     if (!results.length) {
 
       if (newGrid) {
+
         newGrid.innerHTML = `
           <p class="muted">
             No movies found for
@@ -314,7 +660,9 @@ async function searchMovies(query) {
       }
 
       const title =
-        document.querySelector("#new h2");
+        document.querySelector(
+          "#new h2"
+        );
 
       if (title) {
         title.textContent =
@@ -327,7 +675,9 @@ async function searchMovies(query) {
           behavior: "smooth"
         });
 
-      notify("No movies found.");
+      notify(
+        "No movies found."
+      );
 
       return;
     }
@@ -339,9 +689,12 @@ async function searchMovies(query) {
     }
 
     const title =
-      document.querySelector("#new h2");
+      document.querySelector(
+        "#new h2"
+      );
 
     if (title) {
+
       title.textContent =
         `Search Results for "${cleanQuery}"`;
     }
@@ -373,25 +726,31 @@ async function searchMovies(query) {
    MOVIE PLAYER
 ========================= */
 
-function showMovie(index) {
-  const movie = movies[index];
+async function showMovie(index) {
+
+  const movie =
+    movies[index];
 
   if (!movie) return;
 
   if (titleEl) {
-    titleEl.textContent = movie.title;
+    titleEl.textContent =
+      movie.title;
   }
 
   if (descEl) {
-    descEl.textContent = movie.desc;
+    descEl.textContent =
+      movie.desc;
   }
 
   if (genreEl) {
+
     genreEl.textContent =
       movie.genre.toUpperCase();
   }
 
   if (metaEl) {
+
     metaEl.innerHTML = `
       <span>${movie.year}</span>
       <span>${movie.rating} ★</span>
@@ -400,23 +759,130 @@ function showMovie(index) {
     `;
   }
 
-  modal?.classList.remove("hidden");
+  modal?.classList.remove(
+    "hidden"
+  );
 
-  if (player) {
-    player.src = demoVideo;
+  /*
+    If the movie already has a free
+    playable video, use it immediately.
+  */
 
-    player.play().catch(() => {});
+  if (movie.freeVideo) {
+
+    playFreeMovie(
+      movie.freeVideo
+    );
+
+    return;
   }
-}
 
-function closeMovie() {
+  /*
+    Otherwise search Internet Archive
+    using the movie title.
+  */
+
+  notify(
+    `Checking for a free legal version of "${movie.title}"...`
+  );
+
   if (player) {
+
     player.pause();
-    player.removeAttribute("src");
+
+    player.removeAttribute(
+      "src"
+    );
+
     player.load();
   }
 
-  modal?.classList.add("hidden");
+  const freeMovie =
+    await findFreeMovie(
+      movie.title
+    );
+
+  if (
+    freeMovie &&
+    freeMovie.video
+  ) {
+
+    movie.freeVideo =
+      freeMovie.video;
+
+    movie.freePoster =
+      freeMovie.poster;
+
+    movie.freeSource =
+      freeMovie.source;
+
+    movie.freeLicense =
+      freeMovie.license;
+
+    movie.freeRights =
+      freeMovie.rights;
+
+    playFreeMovie(
+      freeMovie.video
+    );
+
+    notify(
+      "Free movie found. Playing now."
+    );
+
+  } else {
+
+    notify(
+      "A legal free playable version of this movie was not found."
+    );
+  }
+}
+
+/* =========================
+   PLAY FREE MOVIE
+========================= */
+
+function playFreeMovie(videoUrl) {
+
+  if (!player) return;
+
+  player.src = videoUrl;
+
+  player.load();
+
+  player.play().catch(error => {
+
+    console.error(
+      "Video playback error:",
+      error
+    );
+
+    notify(
+      "The video could not start automatically. Press Play."
+    );
+  });
+}
+
+/* =========================
+   CLOSE MOVIE
+========================= */
+
+function closeMovie() {
+
+  if (player) {
+
+    player.pause();
+
+    player.removeAttribute(
+      "src"
+    );
+
+    player.load();
+  }
+
+  modal?.classList.add(
+    "hidden"
+  );
 }
 
 /* =========================
@@ -424,70 +890,102 @@ function closeMovie() {
 ========================= */
 
 function notify(message) {
+
   if (!toast) return;
 
-  toast.textContent = message;
+  toast.textContent =
+    message;
 
-  toast.classList.remove("hidden");
+  toast.classList.remove(
+    "hidden"
+  );
 
   setTimeout(() => {
-    toast.classList.add("hidden");
-  }, 2200);
+
+    toast.classList.add(
+      "hidden"
+    );
+
+  }, 3000);
 }
 
 /* =========================
    MOVIE CARD CLICK
 ========================= */
 
-document.addEventListener("click", event => {
+document.addEventListener(
+  "click",
+  event => {
 
-  const movieCard =
-    event.target.closest("[data-watch]");
+    const movieCard =
+      event.target.closest(
+        "[data-watch]"
+      );
 
-  if (movieCard) {
-    showMovie(
-      Number(movieCard.dataset.watch)
-    );
+    if (movieCard) {
+
+      showMovie(
+        Number(
+          movieCard.dataset.watch
+        )
+      );
+    }
   }
-});
+);
 
 /* =========================
    KEYBOARD
 ========================= */
 
-document.addEventListener("keydown", event => {
+document.addEventListener(
+  "keydown",
+  event => {
 
-  if (
-    event.key === "Enter" &&
-    document.activeElement?.dataset?.watch
-  ) {
-    showMovie(
-      Number(
-        document.activeElement.dataset.watch
-      )
-    );
+    if (
+      event.key === "Enter" &&
+      document.activeElement?.dataset?.watch
+    ) {
+
+      showMovie(
+        Number(
+          document.activeElement.dataset.watch
+        )
+      );
+    }
+
+    if (
+      event.key === "Escape"
+    ) {
+
+      closeMovie();
+
+      document
+        .getElementById(
+          "profileModal"
+        )
+        ?.classList.add(
+          "hidden"
+        );
+
+      document
+        .getElementById(
+          "messageModal"
+        )
+        ?.classList.add(
+          "hidden"
+        );
+    }
   }
-
-  if (event.key === "Escape") {
-
-    closeMovie();
-
-    document
-      .getElementById("profileModal")
-      ?.classList.add("hidden");
-
-    document
-      .getElementById("messageModal")
-      ?.classList.add("hidden");
-  }
-});
+);
 
 /* =========================
-   CLOSE MOVIE
+   CLOSE MOVIE BUTTON
 ========================= */
 
 document
-  .getElementById("closeMovie")
+  .getElementById(
+    "closeMovie"
+  )
   ?.addEventListener(
     "click",
     closeMovie
@@ -498,37 +996,47 @@ document
 ========================= */
 
 const seeMoreBtn =
-  document.getElementById("seeMoreBtn");
+  document.getElementById(
+    "seeMoreBtn"
+  );
 
 if (seeMoreBtn) {
 
-  seeMoreBtn.onclick = () => {
+  seeMoreBtn.onclick =
+    () => {
 
-    renderNew(movies);
+      renderNew(
+        movies
+      );
 
-    document
-      .getElementById("new")
-      ?.scrollIntoView({
-        behavior: "smooth"
-      });
+      document
+        .getElementById(
+          "new"
+        )
+        ?.scrollIntoView({
+          behavior: "smooth"
+        });
 
-    notify(
-      "Showing available results."
-    );
-  };
+      notify(
+        "Showing available results."
+      );
+    };
 }
 
 /* =========================
-   CATEGORIES BUTTONS
+   CATEGORY BUTTONS
 ========================= */
 
 document
-  .querySelectorAll("[data-category]")
+  .querySelectorAll(
+    "[data-category]"
+  )
   .forEach(button => {
 
     button.addEventListener(
       "click",
       () => {
+
         loadCategory(
           button.dataset.category
         );
@@ -541,16 +1049,24 @@ document
 ========================= */
 
 const searchInput =
-  document.getElementById("searchInput");
+  document.getElementById(
+    "searchInput"
+  );
 
 const searchBtn =
-  document.getElementById("searchBtn");
+  document.getElementById(
+    "searchBtn"
+  );
 
-if (searchBtn && searchInput) {
+if (
+  searchBtn &&
+  searchInput
+) {
 
   searchBtn.addEventListener(
     "click",
     () => {
+
       searchMovies(
         searchInput.value
       );
@@ -561,7 +1077,9 @@ if (searchBtn && searchInput) {
     "keydown",
     event => {
 
-      if (event.key === "Enter") {
+      if (
+        event.key === "Enter"
+      ) {
 
         event.preventDefault();
 
@@ -578,10 +1096,13 @@ if (searchBtn && searchInput) {
 ========================= */
 
 document
-  .getElementById("loginBtn")
+  .getElementById(
+    "loginBtn"
+  )
   ?.addEventListener(
     "click",
     () => {
+
       notify(
         "Google and email sign-in will be connected to Supabase."
       );
@@ -593,12 +1114,19 @@ document
 ========================= */
 
 const languageBtn =
-  document.getElementById("languageBtn");
+  document.getElementById(
+    "languageBtn"
+  );
 
 const languageMenu =
-  document.getElementById("languageMenu");
+  document.getElementById(
+    "languageMenu"
+  );
 
-if (languageBtn && languageMenu) {
+if (
+  languageBtn &&
+  languageMenu
+) {
 
   languageBtn.addEventListener(
     "click",
@@ -613,7 +1141,9 @@ if (languageBtn && languageMenu) {
   );
 
   languageMenu
-    .querySelectorAll("[data-language]")
+    .querySelectorAll(
+      "[data-language]"
+    )
     .forEach(button => {
 
       button.addEventListener(
@@ -625,7 +1155,8 @@ if (languageBtn && languageMenu) {
           const language =
             button.dataset.language;
 
-          currentLanguage = language;
+          currentLanguage =
+            language;
 
           localStorage.setItem(
             "fapreskiLanguage",
@@ -661,6 +1192,7 @@ if (languageBtn && languageMenu) {
           ".language-wrap"
         )
       ) {
+
         languageMenu.classList.add(
           "hidden"
         );
@@ -673,55 +1205,76 @@ if (languageBtn && languageMenu) {
    TRIAL BUTTONS
 ========================= */
 
-["trialBtn", "pricingTrial"]
-  .forEach(id => {
+[
+  "trialBtn",
+  "pricingTrial"
+].forEach(id => {
 
-    const button =
-      document.getElementById(id);
+  const button =
+    document.getElementById(
+      id
+    );
 
-    if (button) {
+  if (button) {
 
-      button.onclick = () => {
+    button.onclick =
+      () => {
 
         notify(
           "7-day free trial will be connected to subscriptions."
         );
       };
-    }
-  });
+  }
+});
 
 /* =========================
    PROFILE
 ========================= */
 
 function openProfile() {
+
   document
-    .getElementById("profileModal")
-    ?.classList.remove("hidden");
+    .getElementById(
+      "profileModal"
+    )
+    ?.classList.remove(
+      "hidden"
+    );
 }
 
 function closeProfile() {
+
   document
-    .getElementById("profileModal")
-    ?.classList.add("hidden");
+    .getElementById(
+      "profileModal"
+    )
+    ?.classList.add(
+      "hidden"
+    );
 }
 
 document
-  .getElementById("profileBtn")
+  .getElementById(
+    "profileBtn"
+  )
   ?.addEventListener(
     "click",
     openProfile
   );
 
 document
-  .getElementById("closeProfile")
+  .getElementById(
+    "closeProfile"
+  )
   ?.addEventListener(
     "click",
     closeProfile
   );
 
 document
-  .getElementById("profileForm")
+  .getElementById(
+    "profileForm"
+  )
   ?.addEventListener(
     "submit",
     event => {
@@ -741,40 +1294,58 @@ document
 ========================= */
 
 function openMessages() {
+
   document
-    .getElementById("messageModal")
-    ?.classList.remove("hidden");
+    .getElementById(
+      "messageModal"
+    )
+    ?.classList.remove(
+      "hidden"
+    );
 }
 
 function closeMessages() {
+
   document
-    .getElementById("messageModal")
-    ?.classList.add("hidden");
+    .getElementById(
+      "messageModal"
+    )
+    ?.classList.add(
+      "hidden"
+    );
 }
 
 document
-  .getElementById("messageBtn")
+  .getElementById(
+    "messageBtn"
+  )
   ?.addEventListener(
     "click",
     openMessages
   );
 
 document
-  .getElementById("closeMessages")
+  .getElementById(
+    "closeMessages"
+  )
   ?.addEventListener(
     "click",
     closeMessages
   );
 
 document
-  .getElementById("searchUsername")
+  .getElementById(
+    "searchUsername"
+  )
   ?.addEventListener(
     "click",
     () => {
 
       const username =
         document
-          .getElementById("usernameSearch")
+          .getElementById(
+            "usernameSearch"
+          )
           ?.value
           .trim();
 
@@ -824,10 +1395,13 @@ document
 ========================= */
 
 document
-  .getElementById("heroList")
+  .getElementById(
+    "heroList"
+  )
   ?.addEventListener(
     "click",
     () => {
+
       notify(
         "Added to My List. Account syncing comes next."
       );
@@ -835,10 +1409,13 @@ document
   );
 
 document
-  .getElementById("addList")
+  .getElementById(
+    "addList"
+  )
   ?.addEventListener(
     "click",
     () => {
+
       notify(
         "Added to My List. Account syncing comes next."
       );
@@ -853,6 +1430,7 @@ if (
   languageBtn &&
   currentLanguage
 ) {
+
   languageBtn.textContent =
     currentLanguage === "zh"
       ? "中文 ▾"
@@ -860,3 +1438,4 @@ if (
 }
 
 loadCatalogue();
+
