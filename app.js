@@ -115,45 +115,65 @@ async function api(endpoint) {
   }
 }
 
-async function loadCategory(category) {
-  const endpointMap = {
-    action:"/action", comedy:"/comedy", romance:"/romance",
-    animation:"/animation", horror:"/horror",
-    drama:"/drama", thriller:"/thriller", family:"/family",
-    documentary:"/documentary", scifi:"/scifi", mystery:"/mystery"
+async function api(endpoint) {
+  const languageMap = {
+    en: "en-US",
+    fr: "fr-FR",
+    es: "es-ES",
+    pt: "pt-PT",
+    ar: "ar-SA",
+    de: "de-DE",
+    it: "it-IT",
+    zh: "zh-CN"
   };
 
-  const endpoint = endpointMap[category];
-  if (!endpoint) return;
+  const tmdbLanguage = languageMap[currentLanguage] || "en-US";
+  const separator = endpoint.includes("?") ? "&" : "?";
 
-  try {
-    notify(`Loading ${category} movies...`);
-    const data = await api(endpoint);
-    const results = (data.results || []).map(m => convertMovie(m, category.toUpperCase()));
+  const response = await fetch(
+    `${API_BASE}${endpoint}${separator}language=${encodeURIComponent(tmdbLanguage)}`
+  );
 
-    if (!results.length) {
-      notify(`No ${category} movies found.`);
-      return;
-    }
-
-    movies = results;
-    renderNew(results);
-    trendingGrid.innerHTML = "";
-    document.querySelector("#new h2").textContent = `${category[0].toUpperCase()}${category.slice(1)} Movies`;
-    document.getElementById("new").scrollIntoView({behavior:"smooth"});
-  } catch (error) {
-    console.error(error);
-    notify(`${category} movies could not be loaded.`);
+  if (!response.ok) {
+    throw new Error(`API error: ${response.status}`);
   }
+
+  return response.json();
 }
 
-async function searchMovies(query) {
-  const cleanQuery = query.trim();
+async function loadCatalogue() {
+  try {
+    const [upcomingData, trendingData] = await Promise.all([
+      api("/upcoming"),
+      api("/trending")
+    ]);
 
-  if (!cleanQuery) {
-    notify("Type a movie name first.");
-    return;
+    const upcoming = (upcomingData.results || [])
+      .map(m => convertMovie(m, "NEW"));
+
+    const trending = (trendingData.results || [])
+      .map(m => convertMovie(m, "TRENDING"));
+
+    movies = [...upcoming, ...trending];
+
+    if (!movies.length) {
+      throw new Error("No movies returned");
+    }
+
+    renderNew(upcoming.length ? upcoming : trending);
+    renderTrending(trending.length ? trending : upcoming);
+
+  } catch (error) {
+    console.error("FAPRESKI API error:", error);
+
+    movies = fallbackMovies;
+
+    renderNew(fallbackMovies);
+    renderTrending(fallbackMovies);
+
+    notify("Showing demo movies while the movie service loads.");
   }
+}
 
   try {
     notify(`Searching for "${cleanQuery}"...`);
