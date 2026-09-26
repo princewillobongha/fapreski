@@ -23,41 +23,59 @@
 }  
   </script>  
 </head>  <body>  
-  <header class="topbar">  
-    <a class="brand" href="#home" aria-label="FAPRESKI home">  
-      <img src="fapreski-logo.jpg" alt="FAPRESKI logo">  
-    </a>  
-    <nav>  
-      <a href="#home">Home</a>  
-      <a href="#new">New Releases</a>  
-      <a href="#categories">Categories</a>  
-      <a href="#mylist">My List</a>  
-      <a href="#messages">Messages</a>  
-    </nav>  
+  <header class="topbar">
+    <a class="brand" href="#home" aria-label="FAPRESKI home">
+      <img src="fapreski-logo.jpg" alt="FAPRESKI logo">
+    </a>
+
+    <nav aria-label="Primary navigation">
+      <a href="#home" data-i18n="navHome">Home</a>
+      <a href="#new" data-i18n="navNew">New Releases</a>
+      <a href="#categories" data-i18n="navCategories">Categories</a>
+      <a href="#mylist" data-i18n="navMyList">My List</a>
+      <a href="#messages" data-i18n="navMessages">Messages</a>
+    </nav>
+
     <div class="search-box">
-      <input id="searchInput" type="search" placeholder="Search movies..." aria-label="Search movies">
-    </div>  <button class="ghost" id="loginBtn">Sign in</button>  
-  <button class="primary" id="trialBtn">Start 7-Day Trial</button>  
-</div>
+      <input id="searchInput" type="search" placeholder="Search movies..." aria-label="Search movies" data-i18n-placeholder="searchPlaceholder">
+    </div>
 
-  </header>  
-  <div class="actions">  
-  <div class="language-wrap">  
-    <button class="ghost" id="languageBtn" type="button">EN ▾</button>  <div class="language-menu hidden" id="languageMenu">  
-  <button type="button" data-language="en">English ✓</button>  
-  <button type="button" data-language="fr">Français</button>  
-  <button type="button" data-language="es">Español</button>  
-  <button type="button" data-language="pt">Português</button>  
-  <button type="button" data-language="ar">العربية</button>  
-  <button type="button" data-language="de">Deutsch</button>  
-  <button type="button" data-language="it">Italiano</button>  
-  <button type="button" data-language="zh">中文</button>  
-</div>
+    <div class="header-actions">
+      <div class="language-wrap">
+        <button class="ghost language-button" id="languageBtn" type="button" aria-haspopup="true" aria-expanded="false">EN ▾</button>
+        <div class="language-menu hidden" id="languageMenu" role="menu">
+          <button type="button" data-language="en" role="menuitem">English</button>
+          <button type="button" data-language="fr" role="menuitem">Français</button>
+          <button type="button" data-language="es" role="menuitem">Español</button>
+          <button type="button" data-language="pt" role="menuitem">Português</button>
+          <button type="button" data-language="ar" role="menuitem">العربية</button>
+          <button type="button" data-language="de" role="menuitem">Deutsch</button>
+          <button type="button" data-language="it" role="menuitem">Italiano</button>
+          <button type="button" data-language="zh" role="menuitem">中文</button>
+        </div>
+      </div>
+      <button class="ghost" id="loginBtn" type="button" data-i18n="signIn">Sign in</button>
+      <button class="primary" id="trialBtn" type="button" data-i18n="trial">Start 7-Day Trial</button>
+    </div>
+  </header>
 
-  </div>  <button class="ghost" id="loginBtn">Sign in</button>
-<button class="primary" id="trialBtn">Start 7-Day Trial</button>
-
-  </div>  
+  <div class="mobile-actions">
+    <div class="language-wrap">
+      <button class="ghost language-button" id="mobileLanguageBtn" type="button" aria-haspopup="true" aria-expanded="false">EN ▾</button>
+      <div class="language-menu hidden" id="mobileLanguageMenu" role="menu">
+        <button type="button" data-language="en" role="menuitem">English</button>
+        <button type="button" data-language="fr" role="menuitem">Français</button>
+        <button type="button" data-language="es" role="menuitem">Español</button>
+        <button type="button" data-language="pt" role="menuitem">Português</button>
+        <button type="button" data-language="ar" role="menuitem">العربية</button>
+        <button type="button" data-language="de" role="menuitem">Deutsch</button>
+        <button type="button" data-language="it" role="menuitem">Italiano</button>
+        <button type="button" data-language="zh" role="menuitem">中文</button>
+      </div>
+    </div>
+    <button class="ghost" id="mobileLoginBtn" type="button" data-i18n="signIn">Sign in</button>
+    <button class="primary" id="mobileTrialBtn" type="button" data-i18n="trial">Start 7-Day Trial</button>
+  </div>
   <main>  
     <section class="hero" id="home">  
       <div class="hero-content">  
@@ -180,21 +198,38 @@
       </div>  
       <p class="demo-note">Demo player: production movies will be connected only after appropriate streaming rights are secured.</p>  
     </div>  
-  </div>    <div class="modal hidden" id="profileModal" role="dialog" aria-modal="true">  
-    <div class="modal-card simple-modal">  
-      <button class="close" id="closeProfile">×</button>  
-      <span class="eyebrow">FAPRESKI ACCOUNT</span>  
-      <h2>Create Profile</h2>  
-      <p>Create your FAPRESKI profile. Authentication will be connected to the database next.</p>  
-      <form id="profileForm">  
-        <input id="profileName" type="text" placeholder="Full name" required>  
-        <input id="profileUsername" type="text" placeholder="Unique username" required>  
-        <input id="profileEmail" type="email" placeholder="Email address" required>  
-        <input id="profileCountry" type="text" placeholder="Country">  
-        <button class="primary" type="submit">Create Profile</button>  
-      </form>  
-    </div>  
-  </div>    <div class="modal hidden" id="messageModal" role="dialog" aria-modal="true">  
+  </div>    <div class="modal hidden" id="profileModal" role="dialog" aria-modal="true" aria-labelledby="accountTitle">
+    <div class="modal-card simple-modal account-modal">
+      <button class="close" id="closeProfile" type="button" aria-label="Close">×</button>
+      <span class="eyebrow">FAPRESKI ACCOUNT</span>
+      <h2 id="accountTitle">Create your account</h2>
+      <p id="accountSubtitle">Create your FAPRESKI account to save movies, build your profile and start your free trial.</p>
+
+      <div class="auth-tabs" role="tablist">
+        <button class="auth-tab active" id="signupTab" type="button">Create account</button>
+        <button class="auth-tab" id="signinTab" type="button">Sign in</button>
+      </div>
+
+      <form id="profileForm" class="account-form">
+        <input id="profileName" type="text" placeholder="Full name" autocomplete="name" required>
+        <input id="profileUsername" type="text" placeholder="Unique username" autocomplete="username" required>
+        <input id="profileEmail" type="email" placeholder="Email address" autocomplete="email" required>
+        <input id="profilePassword" type="password" placeholder="Password (at least 6 characters)" autocomplete="new-password" minlength="6" required>
+        <input id="profileCountry" type="text" placeholder="Country" autocomplete="country-name">
+        <button class="primary" type="submit" id="accountSubmit">Create account</button>
+      </form>
+
+      <form id="signinForm" class="account-form hidden">
+        <input id="signinEmail" type="email" placeholder="Email address" autocomplete="email" required>
+        <input id="signinPassword" type="password" placeholder="Password" autocomplete="current-password" required>
+        <button class="primary" type="submit">Sign in</button>
+      </form>
+
+      <button class="text-btn account-signout hidden" id="signoutBtn" type="button">Sign out</button>
+      <p class="demo-note" id="authStatus">Your account session stays signed in on this device.</p>
+    </div>
+  </div>
+  <div class="modal hidden" id="messageModal" role="dialog" aria-modal="true">  
     <div class="modal-card simple-modal">  
       <button class="close" id="closeMessages">×</button>  
       <span class="eyebrow">FAPRESKI COMMUNITY</span>  
@@ -205,6 +240,8 @@
       <p class="demo-note">Messaging will be connected to authenticated FAPRESKI accounts and the database.</p>  
     </div>  
   </div>    <div class="toast hidden" id="toast"></div>  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
   <script src="app.js"></script>  
 </body>  
 </html>
