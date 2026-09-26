@@ -1,5 +1,5 @@
 // FAPRESKI Supabase browser configuration.
-// Use only the Supabase project URL and publishable/anon key here.
-// NEVER put a Supabase service_role/secret key in this file.
-window.FAPRESKI_SUPABASE_URL = "";
-window.FAPRESKI_SUPABASE_KEY = "";
+// This file contains only the public browser credentials.
+// NEVER put a Supabase secret/service_role key here.
+window.FAPRESKI_SUPABASE_URL = "https://cnymakmkrunyphxkvayf.supabase.co";
+window.FAPRESKI_SUPABASE_KEY = "sb_publishable_1QwKGJQCXOHsede8HAO76g_AD0dp8nE";
