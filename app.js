@@ -1312,6 +1312,30 @@ document.getElementById("heroList")?.addEventListener("click",addCurrentToList);
 document.getElementById("addList")?.addEventListener("click",addCurrentToList);
 
 /* =========================
+   CATEGORY LABELS + PRIVACY
+========================= */
+const categoryNames={
+  en:["Action","Comedy","Drama","Thriller","Romance","Animation","Family","Horror","Documentary","Sci-Fi","Mystery"],
+  fr:["Action","Comédie","Drame","Thriller","Romance","Animation","Famille","Horreur","Documentaire","Science-fiction","Mystère"],
+  es:["Acción","Comedia","Drama","Thriller","Romance","Animación","Familia","Terror","Documental","Ciencia ficción","Misterio"],
+  pt:["Ação","Comédia","Drama","Thriller","Romance","Animação","Família","Terror","Documentário","Ficção científica","Mistério"],
+  de:["Action","Komödie","Drama","Thriller","Romantik","Animation","Familie","Horror","Dokumentation","Sci-Fi","Mystery"],
+  it:["Azione","Commedia","Drammatico","Thriller","Romantico","Animazione","Famiglia","Horror","Documentario","Fantascienza","Mistero"],
+  zh:["动作","喜剧","剧情","惊悚","爱情","动画","家庭","恐怖","纪录片","科幻","悬疑"],
+  ar:["أكشن","كوميديا","دراما","إثارة","رومانسية","رسوم متحركة","عائلي","رعب","وثائقي","خيال علمي","غموض"]
+};
+function applyCategoryLabels(){
+  const names=categoryNames[currentLanguage]||categoryNames.en;
+  document.querySelectorAll("[data-category]").forEach((b,i)=>{if(names[i])b.textContent=names[i];});
+}
+const originalApplyTranslations=applyTranslations;
+applyTranslations=function(){originalApplyTranslations();applyCategoryLabels();};
+document.getElementById("privacyLink")?.addEventListener("click",event=>{
+  event.preventDefault();
+  notify("FAPRESKI privacy: your account data is used to provide authentication and account features.");
+});
+
+/* =========================
    START
 ========================= */
 
